@@ -1,0 +1,33 @@
+{
+  "name": "msgtree",
+  "version": "0.0.1",
+  "description": "Simple Message Tree REST API",
+  "homepage": "https://github.com/RWander/msgtree",
+  "repository": "https://github.com/RWander/msgtree",
+  "bugs": "https://github.com/RWander/msgtree/issues",
+  "author": "Roman Korneyev <roman.korneyev@gmail.com>",
+  "contributors": ["Roman Korneyev <roman.korneyev@gmail.com>"],
+  "engines": {
+    "node": ">=4.4.3"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "mongodb",
+    "Model",
+    "Tree",
+    "Structures",
+    "messages"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^2.4.1"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "lodash": "^4.11.1",
+    "mongoose": "^4.4.14"
+  }
+}
