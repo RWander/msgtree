@@ -1,0 +1,9 @@
+{
+  "http": {
+    "host": "TODO",
+    "port": "TODO"
+  },
+  "db": {
+    "uri": "TODO"
+  }
+}
