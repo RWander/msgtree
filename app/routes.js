@@ -7,7 +7,8 @@
 
 module.exports = function (app, passport) {
   app.get('/ping', function(req, res) {
-    res.status(200).send('pong!');
+    res.setHeader('Content-Type', 'text/plain');
+    res.send('pong!');
   });
 
   // router.post('/register', function(req, res, next) {
@@ -27,6 +28,15 @@ module.exports = function (app, passport) {
   //     });
   //   });
   // });
+
+  app.post('/login',
+    passport.authenticate('local'),
+    function(req, res) {
+      // If this function gets called, authentication was successful.
+      // `req.user` contains the authenticated user.
+      res.send(req.user.username);
+    }
+  );
 
   // router.post('/login',
   //   passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),

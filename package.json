@@ -14,7 +14,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "cd test && node jasmine-runner.js",
+    "test": "cd test && NODE_ENV=test node jasmine-runner.js",
     "start": "node app",
     "lint": "eslint ."
   },

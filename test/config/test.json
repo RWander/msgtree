@@ -1,0 +1,9 @@
+{
+  "http": {
+    "host": "localhost",
+    "port": "1112"
+  },
+  "db": {
+    "uri": "mongodb://localhost/msgtree-test"
+  }
+}
