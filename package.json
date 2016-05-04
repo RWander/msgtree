@@ -15,7 +15,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cd test && NODE_ENV=test node jasmine-runner.js",
+    "test-debug": "cd test && NODE_ENV=test node debug jasmine-runner.js",
     "start": "node app",
+    "debug": "node debug app",
     "lint": "eslint ."
   },
   "keywords": [
