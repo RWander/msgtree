@@ -1,9 +1,9 @@
 {
   "http": {
-    "host": "TODO",
-    "port": "TODO"
+    "host": "localhost",
+    "port": "1110"
   },
   "db": {
-    "uri": "TODO"
+    "uri": "mongodb://localhost/msgtree"
   }
 }

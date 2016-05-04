@@ -14,8 +14,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "cd test && node jasmine-runner.js",
-    "start": "node src",
+    "test": "cd test && NODE_ENV=test node jasmine-runner.js",
+    "test-debug": "cd test && NODE_ENV=test node debug jasmine-runner.js",
+    "start": "node app",
+    "debug": "node debug app",
     "lint": "eslint ."
   },
   "keywords": [
@@ -38,8 +40,10 @@
     "express": "^4.13.4",
     "lodash": "^4.11.1",
     "mongoose": "^4.4.14",
+    "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^4.0.0"
+    "passport-local-mongoose": "^4.0.0",
+    "winston": "^2.2.0"
   }
 }

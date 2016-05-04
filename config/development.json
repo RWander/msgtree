@@ -4,6 +4,6 @@
     "port": "1111"
   },
   "db": {
-    "uri": "TODO"
+    "uri": "mongodb://localhost/msgtree-dev"
   }
 }
