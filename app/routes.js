@@ -1,9 +1,8 @@
 'use strict';
 
-// const express = require('express');
-// const passport = require('passport');
-// const Account = require('../models/Account');
-// const router = express.Router();
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const Account = mongoose.model('accounts');
 
 module.exports = function (app, passport) {
   app.get('/ping', function(req, res) {
@@ -11,23 +10,22 @@ module.exports = function (app, passport) {
     res.send('pong!');
   });
 
-  // router.post('/register', function(req, res, next) {
-  //   const newAccount = new Account({ username : req.body.username });
-  //   const pswd = req.body.password;
-  //
-  //   Account.register(newAccount, pswd, function(err, account) {
-  //     if (err) return res.render('register', { error : err.message });
-  //
-  //     passport.authenticate('local')(req, res, function () {
-  //       req.session.save(function (err) {
-  //         if (err) return next(err);
-  //
-  //         // TODO (rwander): send 200 HTTP status
-  //         //res.redirect('/');
-  //       });
-  //     });
-  //   });
-  // });
+  app.post('/register', function(req, res, next) {
+    const newAccount = new Account({ username : req.body.username });
+    const password = req.body.password;
+
+    Account.register(newAccount, password, function(err, account) {
+      if (err) return next(err);
+
+      passport.authenticate('local')(req, res, function() {
+        req.session.save(function (err) {
+          if (err) return next(err);
+
+          res.json(_.pick(account, ['username']));
+        });
+      });
+    });
+  });
 
   app.post('/login',
     passport.authenticate('local'),

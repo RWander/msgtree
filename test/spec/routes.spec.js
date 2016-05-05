@@ -6,6 +6,7 @@
 describe('Athlete routes', function()  {
   const mongoose = require('mongoose');
   const request = require('supertest');
+  const faker = require('faker');
   const server = require('../../app');
   const generator = require('../generator');
 
@@ -31,12 +32,31 @@ describe('Athlete routes', function()  {
   it('HTTP GET /ping - ping REST API', function(done) {
     request(app)
       .get('/ping')
+      .send()
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(200)
       .end(function(err, res) {
         if (err) throw err;
 
         expect(res.text).toBe('pong!');
+        done();
+      });
+  });
+
+  it('HTTP POST /register - register new user account', function(done) {
+    const postData = {
+      username: faker.internet.userName(),
+      password: faker.internet.password()
+    };
+    request(app)
+      .post('/register')
+      .send(postData)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body).toEqual({ username: postData.username });
         done();
       });
   });

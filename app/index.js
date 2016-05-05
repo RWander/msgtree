@@ -19,9 +19,10 @@ fs.readdirSync(models)
   .forEach(file => require(join(models, file)));
 
 // Bootstrap routes
-require('./passport')(passport);
-require('./express')(app, passport);
-require('./routes')(app, passport);
+require('./passport')(passport);      // passport settings
+require('./express')(app, passport);  // express settings
+require('./routes')(app, passport);   // routes
+require('./errors')(app);             // error handlers
 
 if (env !== 'test') {
   start();
