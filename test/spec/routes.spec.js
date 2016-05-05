@@ -1,6 +1,6 @@
 'use strict';
 
-/*eslint-env jasmine */
+/* eslint-env jasmine */
 /* eslint-disable no-console */
 
 describe('Athlete routes', function()  {
@@ -9,11 +9,10 @@ describe('Athlete routes', function()  {
   const server = require('../../app');
   const generator = require('../generator');
 
-  let app;
+  const app = server.app;
 
   beforeAll(function(done)  {
     // run server
-    app = server.app;
     server.start(() => {
       // drop test database
       mongoose.connection.db.dropDatabase(() => {

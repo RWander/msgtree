@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const Account = mongoose.model('accounts');
 
 function generate(done) {
+  // accounts
   const accounts = [];
   for (let i = 0; i < 5; i++) {
     accounts[i] = {
@@ -14,6 +15,10 @@ function generate(done) {
       password: faker.internet.password()
     };
   }
+
+  // TODO: messages
+  // ..
+
   Promise.all(
     accounts.map(addAccount)
   ).then(
@@ -30,7 +35,7 @@ function addAccount(data) {
       function(err, account) {
         if (err) reject(err);
 
-        console.log('user: ' + account.username + ' added.');
+        console.log(`account ${account.username} is added.`);
 
         resolve(account);
       }
