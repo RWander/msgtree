@@ -6,6 +6,7 @@
 describe('Athlete routes', function()  {
   const mongoose = require('mongoose');
   const request = require('supertest');
+  const faker = require('faker');
   const server = require('../../app');
   const generator = require('../generator');
 
@@ -31,6 +32,7 @@ describe('Athlete routes', function()  {
   it('HTTP GET /ping - ping REST API', function(done) {
     request(app)
       .get('/ping')
+      .send()
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(200)
       .end(function(err, res) {
@@ -41,16 +43,69 @@ describe('Athlete routes', function()  {
       });
   });
 
-  // it('HTTP POST /login - login with username and password', function(done) {
-  //   request(app)
-  //     .post('/login')
-  //     .expect('Content-Type', /json/)
-  //     .expect(200)
-  //     .end(function(err, res) {
-  //       if (err) throw err;
-  //
-  //       expect(res.text).toBe('TODO');
-  //       done();
-  //     });
-  // });
+  const postData = {
+    username: faker.internet.userName(),
+    password: faker.internet.password()
+  };
+
+  it('HTTP POST /register - successful register a new user account', function(done) {
+    request(app)
+      .post('/register')
+      .send(postData)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body).toEqual({ user: postData.username });
+        done();
+      });
+  });
+
+  it('HTTP POST /register - failed register a new user account', function(done) {
+    request(app)
+      .post('/register')
+      .send(postData)
+      .expect('Content-Type', /json/)
+      .expect(500)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body.error.name).toEqual('UserExistsError');
+        done();
+      });
+  });
+
+  it('HTTP POST /login - successful login with the username and password', function(done) {
+    request(app)
+      .post('/login')
+      .send(postData)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body).toEqual({ username: postData.username });
+        done();
+      });
+  });
+
+  const wrongAccount = {
+    username: faker.internet.userName(),
+    password: faker.internet.password()
+  };
+
+  it('HTTP POST /login - failed login with the unknown username and password', function(done) {
+    request(app)
+      .post('/login')
+      .send(wrongAccount)
+      .expect('Content-Type', /json/)
+      .expect(401)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body.error.name).toEqual('IncorrectUsernameError');
+        done();
+      });
+  });
 });

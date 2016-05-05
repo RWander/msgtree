@@ -1,9 +1,8 @@
 'use strict';
 
-// const express = require('express');
-// const passport = require('passport');
-// const Account = require('../models/Account');
-// const router = express.Router();
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const Account = mongoose.model('accounts');
 
 module.exports = function (app, passport) {
   app.get('/ping', function(req, res) {
@@ -11,43 +10,40 @@ module.exports = function (app, passport) {
     res.send('pong!');
   });
 
-  // router.post('/register', function(req, res, next) {
-  //   const newAccount = new Account({ username : req.body.username });
-  //   const pswd = req.body.password;
-  //
-  //   Account.register(newAccount, pswd, function(err, account) {
-  //     if (err) return res.render('register', { error : err.message });
-  //
-  //     passport.authenticate('local')(req, res, function () {
-  //       req.session.save(function (err) {
-  //         if (err) return next(err);
-  //
-  //         // TODO (rwander): send 200 HTTP status
-  //         //res.redirect('/');
-  //       });
-  //     });
-  //   });
-  // });
+  app.post('/register', function(req, res, next) {
+    const newAccount = new Account({ username : req.body.username });
+    const password = req.body.password;
 
-  app.post('/login',
-    passport.authenticate('local'),
-    function(req, res) {
-      // If this function gets called, authentication was successful.
-      // `req.user` contains the authenticated user.
-      res.send(req.user.username);
-    }
-  );
+    Account.register(newAccount, password, function(err, account) {
+      if (err) return next(err);
 
-  // router.post('/login',
-  //   passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
-  //   function(req, res, next) {
-  //   req.session.save(function (err) {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     res.redirect('/');
-  //   });
-  // });
+      passport.authenticate('local')(req, res, function() {
+        req.session.save(function (err) {
+          if (err) return next(err);
+
+          res.json(req.session.passport);
+        });
+      });
+    });
+  });
+
+  app.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) return next(err);
+
+      if (!user) {
+        const err = new Error(info.message);
+        err.name = info.name;
+        err.status = 401;
+        return next(err);
+      }
+
+      req.login(user, function (err) {
+        if (err) return next(err);
+        return res.json(_.pick(req.user, ['username']));
+      });
+    })(req, res, next);
+  });
 
   // router.get('/logout', function(req, res, next) {
   //     req.logout();
