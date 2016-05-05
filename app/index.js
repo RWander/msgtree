@@ -40,7 +40,7 @@ function listen (callback) {
     const host = address.address;
     const port = address.port;
 
-    console.log('RESTful server "%s" listening at http://%s:%s', env, host, port);
+    console.log(`RESTful server "${env}" listening at http://${host}:${port}`);
 
     if (callback) {
       callback();
