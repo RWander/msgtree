@@ -21,31 +21,29 @@ module.exports = function (app, passport) {
         req.session.save(function (err) {
           if (err) return next(err);
 
-          res.json(_.pick(account, ['username']));
+          res.json(req.session.passport);
         });
       });
     });
   });
 
-  app.post('/login',
-    passport.authenticate('local'),
-    function(req, res) {
-      // If this function gets called, authentication was successful.
-      // `req.user` contains the authenticated user.
-      res.send(req.user.username);
-    }
-  );
+  app.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) return next(err);
 
-  // router.post('/login',
-  //   passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
-  //   function(req, res, next) {
-  //   req.session.save(function (err) {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     res.redirect('/');
-  //   });
-  // });
+      if (!user) {
+        const err = new Error(info.message);
+        err.name = info.name;
+        err.status = 401;
+        return next(err);
+      }
+
+      req.login(user, function (err) {
+        if (err) return next(err);
+        return res.json(_.pick(req.user, ['username']));
+      });
+    })(req, res, next);
+  });
 
   // router.get('/logout', function(req, res, next) {
   //     req.logout();
