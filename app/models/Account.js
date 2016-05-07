@@ -29,4 +29,13 @@ Account.statics.create = function(username, password) {
   });
 };
 
+Account.statics.getWithCommentCount = function() {
+  const self = this;
+
+  return new Promise(function(resolve, reject) {
+    // TODO
+    // ..
+  });
+};
+
 mongoose.model('accounts', Account);

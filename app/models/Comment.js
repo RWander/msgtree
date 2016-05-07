@@ -53,4 +53,23 @@ Comment.statics.create = function(text, postedBy, ancestors, parent) {
   });
 };
 
+
+Comment.statics.find = function() {
+  const self = this;
+
+  return new Promise(function(resolve, reject) {
+    // TODO
+    // ..
+  });
+};
+
+Comment.statics.getMaxDepth = function() {
+  const self = this;
+
+  return new Promise(function(resolve, reject) {
+    // TODO
+    // ..
+  });
+};
+
 mongoose.model('comments', Comment);
