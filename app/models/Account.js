@@ -4,22 +4,29 @@ const passportLocalMongoose = require('passport-local-mongoose');
 
 const Account = new Schema({});
 
-Account.statics.create = function (username, password) {
+Account.plugin(passportLocalMongoose);
+
+/**
+ * Account - creates a new istance of Account
+ *
+ * @param  {string} username
+ * @param  {string} password
+ * @return {Promise}
+ */
+Account.statics.create = function(username, password) {
+  const self = this;
+
   return new Promise(function(resolve, reject) {
-    Account.register(
-      new Account({ username : username }),
+    self.register(
+      new self({ username : username }),
       password,
       function(err, account) {
-        if (err) reject(err);
-
-        //console.log(`account ${account.username} is added.`);
+        if (err) return reject(err);
 
         resolve(account);
       }
     );
   });
 };
-
-Account.plugin(passportLocalMongoose);
 
 mongoose.model('accounts', Account);

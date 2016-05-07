@@ -26,9 +26,20 @@ const Comment = new Schema({
   }
 });
 
+/**
+ * Comment - creates a new instance of Comment
+ *
+ * @param  {string} text
+ * @param  {date} postedBy
+ * @param  {[Schema.Types.ObjectId]} ancestors
+ * @param  {Schema.Types.ObjectId} parent
+ * @return {Promise}
+ */
 Comment.statics.create = function(text, postedBy, ancestors, parent) {
+  const self = this;
+
   return new Promise(function(resolve, reject) {
-    const comment = new Comment({
+    const comment = new self({
       text,
       postedBy,
       ancestors,
@@ -36,6 +47,7 @@ Comment.statics.create = function(text, postedBy, ancestors, parent) {
     });
     comment.save(function(err) {
       if (err) return reject(err);
+
       resolve(comment);
     });
   });

@@ -3,7 +3,7 @@
 /* eslint-env jasmine */
 /* eslint-disable no-console */
 
-describe('Athlete routes', function()  {
+describe('msgtree routes', function()  {
   const mongoose = require('mongoose');
   const request = require('supertest');
   const faker = require('faker');
