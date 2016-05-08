@@ -16,6 +16,7 @@
   "scripts": {
     "test": "cd test && NODE_ENV=test node jasmine-runner.js",
     "test-debug": "cd test && NODE_ENV=test node debug jasmine-runner.js",
+    "coverage": "cd test && NODE_ENV=test istanbul cover jasmine-runner.js",
     "start": "node app",
     "debug": "node debug app",
     "lint": "eslint ."
@@ -30,12 +31,13 @@
   "license": "ISC",
   "devDependencies": {
     "faker": "^3.1.0",
+    "istanbul": "^0.4.3",
     "jasmine": "^2.4.1",
     "jasmine-spec-reporter": "^2.4.0",
     "supertest": "^1.2.0"
   },
   "dependencies": {
-    "body-parser": "^1.15.0",
+    "body-parser": "^1.15.1",
     "config": "^1.20.1",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^1.1.0",
@@ -44,7 +46,7 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "lodash": "^4.11.2",
-    "mongoose": "^4.4.14",
+    "mongoose": "^4.4.15",
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
