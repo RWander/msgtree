@@ -50,13 +50,14 @@ Comment.statics.create = function(data) {
   });
 };
 
-Comment.statics.find = function() {
-  const self = this;
 
-  return new Promise(function(resolve, reject) {
-    // TODO
-    // ..
-  });
+/**
+ * Comment - gets all comments
+ *
+ * @return {Promise}
+ */
+Comment.statics.getAll = function() {
+  return this.find().exec();
 };
 
 Comment.statics.getMaxDepth = function() {

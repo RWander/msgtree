@@ -108,4 +108,35 @@ describe('msgtree routes', function()  {
         done();
       });
   });
+
+  const commentData = {
+    text: 'Some text here'
+  };
+  it('HTTP POST /createComment - create a new comment', function(done) {
+    request(app)
+      .post('/createComment')
+      .send(commentData)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body.text).toEqual(commentData.text);
+        done();
+      });
+  });
+
+  it('HTTP GET /getComments - gets all comments', function(done) {
+    request(app)
+      .get('/getComments')
+      .send()
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body.length).toBeGreaterThan(1);
+        done();
+      });
+  });
 });
