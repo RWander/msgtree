@@ -78,4 +78,11 @@ module.exports = function (app, passport) {
       err => next(err)
     );
   });
+
+  app.get('/getAccountsStatistic', function(req, res, next) {
+    Account.getWithCommentCount().then(
+      accounts => res.json(accounts),
+      err => next(err)
+    );
+  });
 };

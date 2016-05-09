@@ -29,12 +29,34 @@ Account.statics.create = function(username, password) {
   });
 };
 
-Account.statics.getWithCommentCount = function() {
-  const self = this;
 
+/**
+ * Account - get all accounts with comments count
+ *
+ * @return {Promise}
+ */
+Account.statics.getWithCommentCount = function() {
+  // NOTE: Only one query to db! :)
   return new Promise(function(resolve, reject) {
-    // TODO
-    // ..
+    mongoose.model('comments').aggregate([
+      { $group: { _id : '$postedBy', count: { $sum: 1 } }},
+      { $sort: { count: -1 } },
+      { $lookup: { from: 'accounts', localField: '_id', foreignField: '_id', as: 'account' } },
+      { $project: { _id: 0, 'account.username': 1, count: 1} },
+      { $unwind: '$account' }
+    ])
+    .exec(function(err, users) {
+      if (err) return reject(err);
+
+      const result = users.map(u => {
+        return {
+          username: u.account.username,
+          count: u.count
+        };
+      });
+
+      resolve(result);
+    });
   });
 };
 
