@@ -33,6 +33,7 @@ function createAccounts() {
         accounts.forEach(account => {
           console.log(`account ${account.username} is added.`);
         });
+        console.log(`Total account count: ${accounts.length}.`);
         resolve(accounts);
       },
       err => reject(err)
@@ -75,8 +76,9 @@ function createComments(users) {
     ).then(
       data => {
         data.forEach(comment => {
-          console.log(`comments ${comment.text} is added.`);
+          console.log(`comment ${comment._id} is added.`);
         });
+        console.log(`Total comment count: ${data.length}.`);
         resolve(data);
       },
       err => reject(err)

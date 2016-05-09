@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// see https://docs.mongodb.com/manual/tutorial/model-tree-structures-with-ancestors-array/
 const Comment = new Schema({
   text: {
     type: 'string',
@@ -50,21 +51,42 @@ Comment.statics.create = function(data) {
   });
 };
 
-Comment.statics.find = function() {
-  const self = this;
 
-  return new Promise(function(resolve, reject) {
-    // TODO
-    // ..
-  });
+/**
+ * Comment - gets all comments
+ *
+ * @return {Promise}
+ */
+Comment.statics.getAll = function() {
+  return this.find().exec();
 };
 
+
+/**
+ * Comment - gets a comment with max level of depth in the comment tree.
+ *
+ * @return {Promise}
+ */
 Comment.statics.getMaxDepth = function() {
   const self = this;
 
   return new Promise(function(resolve, reject) {
-    // TODO
-    // ..
+    self.aggregate([{
+      $project: {
+        _id: 1,
+        text: 1,
+        postedAt: 1,
+        postedBy: 1,
+        depth: { $size: '$ancestors' }
+      }},
+      { $sort: { depth: -1 } },
+      { $limit: 1 }
+    ])
+    .exec(function(err, comments) {
+      if (err) return reject(err);
+
+      resolve(comments.length > 0 ? comments[0] : null);
+    });
   });
 };
 
