@@ -4,6 +4,7 @@
 /* eslint-disable no-console */
 
 describe('msgtree routes', function()  {
+  const _ = require('lodash');
   const request = require('supertest');
   const faker = require('faker');
   const app = require('../../app').app;
@@ -129,6 +130,30 @@ describe('msgtree routes', function()  {
         if (err) throw err;
 
         expect(res.body).hasFields(['_id', 'text', 'postedAt', 'postedBy', 'depth']);
+        done();
+      });
+  });
+
+  it('HTTP GET /getAccountsStatistic - get all accounts with comments count', function(done) {
+    request(app)
+      .get('/getAccountsStatistic')
+      .send()
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        const accounts = res.body;
+
+        // check schema
+        accounts.forEach(account => {
+          expect(account).hasFields(['username', 'count']);
+        });
+
+        // check sorting
+        const sorted = _.reverse(_.sortBy(accounts, 'count'));
+        expect(accounts.map(a => a.count)).toEqual(sorted.map(a => a.count)); // ignore 'username' field
+
         done();
       });
   });
