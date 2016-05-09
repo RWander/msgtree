@@ -64,8 +64,22 @@ Comment.statics.getMaxDepth = function() {
   const self = this;
 
   return new Promise(function(resolve, reject) {
-    // TODO
-    // ..
+    self.aggregate([{
+      $project: {
+        _id: 1,
+        text: 1,
+        postedAt: 1,
+        postedBy: 1,
+        depth: { $size: '$ancestors' }
+      }},
+      { $sort: { depth: -1 } },
+      { $limit: 1 }
+    ])
+    .exec(function(err, comments) {
+      if (err) return reject(err);
+
+      resolve(comments.length > 0 ? comments[0] : null);
+    });
   });
 };
 

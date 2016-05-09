@@ -139,4 +139,18 @@ describe('msgtree routes', function()  {
         done();
       });
   });
+
+  it('HTTP GET /getMaxDepth - gets a comment with the max depth', function(done) {
+    request(app)
+      .get('/getMaxDepth')
+      .send()
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        expect(res.body).hasFields(['_id', 'text', 'postedAt', 'postedBy', 'depth']);
+        done();
+      });
+  });
 });

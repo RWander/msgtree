@@ -71,4 +71,11 @@ module.exports = function (app, passport) {
       err => next(err)
     );
   });
+
+  app.get('/getMaxDepth', function(req, res, next) {
+    Comment.getMaxDepth().then(
+      comment => res.json(comment),
+      err => next(err)
+    );
+  });
 };
