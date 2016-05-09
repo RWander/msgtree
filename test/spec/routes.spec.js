@@ -4,30 +4,9 @@
 /* eslint-disable no-console */
 
 describe('msgtree routes', function()  {
-  const mongoose = require('mongoose');
   const request = require('supertest');
   const faker = require('faker');
-  const server = require('../../app');
-  const generator = require('../generator');
-
-  const app = server.app;
-
-  beforeAll(function(done)  {
-    // run server
-    server.start(() => {
-      // drop test database
-      mongoose.connection.db.dropDatabase(() => {
-        console.log('Test database is dropped.');
-
-        // create test database
-        generator((err) => {
-          if (err) throw err;
-          console.log('Test database is filled.');
-          done();
-        });
-      });
-    });
-  });
+  const app = require('../../app').app;
 
   it('HTTP GET /ping - ping REST API', function(done) {
     request(app)
