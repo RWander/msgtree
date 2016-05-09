@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// see https://docs.mongodb.com/manual/tutorial/model-tree-structures-with-ancestors-array/
 const Comment = new Schema({
   text: {
     type: 'string',
@@ -60,6 +61,12 @@ Comment.statics.getAll = function() {
   return this.find().exec();
 };
 
+
+/**
+ * Comment - gets a comment with max level of depth in the comment tree.
+ *
+ * @return {Promise}
+ */
 Comment.statics.getMaxDepth = function() {
   const self = this;
 
