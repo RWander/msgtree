@@ -6,7 +6,6 @@ const mongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const csrf = require('csurf');
 const flash = require('connect-flash');
 const winston = require('winston');
 
@@ -47,8 +46,4 @@ module.exports = function (app, passport) {
 
   // connect flash for flash messages - should be declared after sessions
   app.use(flash());
-
-  if (env !== 'test') {
-    app.use(csrf());
-  }
 };

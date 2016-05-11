@@ -6,6 +6,16 @@ const Account = mongoose.model('accounts');
 const Comment = mongoose.model('comments');
 
 module.exports = function (app, passport) {
+  function loggedIn(req, res, next) {
+    if (req.user) {
+      next();
+    } else {
+      const err = new Error('Forbidden');
+      err.status = 403;
+      next(err);
+    }
+  }
+    
   app.get('/ping', function(req, res) {
     res.setHeader('Content-Type', 'text/plain');
     res.send('pong!');
@@ -46,22 +56,16 @@ module.exports = function (app, passport) {
     })(req, res, next);
   });
 
-  app.post('/createComment', function(req, res, next) {
+  // This method only for authorized users!
+  app.post('/createComment', loggedIn, function(req, res, next) {
     // TODO: in real appication we should validate the schema of req.body!
     // (usually I use https://www.npmjs.com/package/json-schema)
+    const data = req.body;
+    data['postedBy'] = req.user._id;
 
-    // TODO: get current user!
-    Account.find(null).exec().then(
-      accounts => {
-
-        const data = req.body;
-        data['postedBy'] = accounts[0]._id;
-
-        Comment.create(data).then(
-          comment => res.json(comment),
-          err => next(err)
-        );
-      }
+    Comment.create(data).then(
+      comment => res.json(comment),
+      err => next(err)
     );
   });
 
