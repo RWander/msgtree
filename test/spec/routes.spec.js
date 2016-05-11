@@ -23,7 +23,7 @@ describe('msgtree routes', function()  {
       });
   });
 
-  const postData = {
+  const accountData = {
     username: faker.internet.userName(),
     password: faker.internet.password()
   };
@@ -31,13 +31,13 @@ describe('msgtree routes', function()  {
   it('HTTP POST /register - successful register a new user account', function(done) {
     request(app)
       .post('/register')
-      .send(postData)
+      .send(accountData)
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function(err, res) {
         if (err) throw err;
 
-        expect(res.body).toEqual({ user: postData.username });
+        expect(res.body).toEqual({ user: accountData.username });
         done();
       });
   });
@@ -45,27 +45,13 @@ describe('msgtree routes', function()  {
   it('HTTP POST /register - failed register a new user account', function(done) {
     request(app)
       .post('/register')
-      .send(postData)
+      .send(accountData)
       .expect('Content-Type', /json/)
       .expect(500)
       .end(function(err, res) {
         if (err) throw err;
 
         expect(res.body.error.name).toEqual('UserExistsError');
-        done();
-      });
-  });
-
-  it('HTTP POST /login - successful login with the username and password', function(done) {
-    request(app)
-      .post('/login')
-      .send(postData)
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .end(function(err, res) {
-        if (err) throw err;
-
-        expect(res.body).toEqual({ username: postData.username });
         done();
       });
   });
@@ -89,12 +75,30 @@ describe('msgtree routes', function()  {
       });
   });
 
+  let cookie;
+  it('HTTP POST /login - successful login with the username and password', function(done) {
+    request(app)
+      .post('/login')
+      .send(accountData)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) throw err;
+
+        cookie = res.headers['set-cookie'];
+
+        expect(res.body).toEqual({ username: accountData.username });
+        done();
+      });
+  });
+
   const commentData = {
-    text: 'Some text here'
+    text: faker.lorem.paragraph()
   };
   it('HTTP POST /createComment - create a new comment', function(done) {
     request(app)
       .post('/createComment')
+      .set('cookie', cookie)
       .send(commentData)
       .expect('Content-Type', /json/)
       .expect(200)
